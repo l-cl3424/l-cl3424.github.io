@@ -14,7 +14,7 @@
                dataset.push(i);
             }
             //you can uncomment the line below to see this data printed out to your javascript console
-            console.log(dataset)
+            //console.log(dataset)
 
 
             //YOUR ASSIGNMENT STARTS HERE: now you will make a function to change the color of the text
@@ -32,8 +32,9 @@
 				.text(function(d) {
 					return d;
 				})
-				.style("color", function(d) {
-                    return "green"
+
+				//.style("color", function(d) {
+                    return "red"
                     //YOUR CODE WILL BE HERE
                     //
 
@@ -57,7 +58,18 @@
                     */
 
 
-				});
+				})
+				.style("color", function(d) {
+if (d%3==0 && d%5!=0) { //Threshold of 15
+return "blue";
+} else if (d%3!=0 && d%5==0){
+return "red";}
+else if (d%3==0 && d%5==0){
+return "gree";}
+else {
+	return "black"
+}
+});
 
 		</script>
 	</body>
