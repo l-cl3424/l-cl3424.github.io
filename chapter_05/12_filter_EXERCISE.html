@@ -12,24 +12,45 @@
       //file name is "density_income_ny_counties.csv"
       //see 03 for loading
 
-						d3.csv("density_income_ny_counties.csv")
-			      .then(function(data) {
-			        // data is now whole data set from your food.csv file
+			var dataset;
 
-			        //this line below will print out the dataset into your developer console.
-							console.log(data);
-			        //open food.csv in another window and you can see that it will match what is pointed in the developer console.
 
-			        //it is a good idea sometimes to console log your data when you first load it to check that it is what you expect.
-			        //you would remove or comment out the cosole log line after - some browsers will not allow console log statements
+			d3.csv("density_income_ny_counties.csv")
+			.then(function(data) {
+				console.log(data);
+				dataset=data;
 
-			        // now you can use your data to draw chart in here!
+				var dataa=[];
+			//	for (var i = 0; i <dataset.length; i++) {
+			//		 name.push(dataset[i].Geo_NAME);
+			//		 income.push(dataset[i].median_income);
+			//	};
+				for (var i = 0; i <dataset.length; i++) {
+					 var item=[];
+					 item.push(dataset[i].Geo_NAME);
+					 item.push(dataset[i].median_income);
+					 dataa.push(item);
+				};
 
-			      })
-			      .catch(function(error){
-			           // handle error
-			      })
-      
+					for (var i = 0; i <dataa.length; i++){
+						d3.select("body").selectAll("p")
+							.data(dataa)
+							.enter()
+							.append("p")
+
+							.text(function(d){
+						return d[0];})
+
+							.style("color", function(d) {
+			if (d[1] > 65323) {
+			return "red";
+		} else {
+				return "black"
+			}
+		});
+	};
+});
+
       //make a paragraph for each county, and set the name of the county as its text
       //if the median income of the county is above the median income of new york state, turn the county name red
 
