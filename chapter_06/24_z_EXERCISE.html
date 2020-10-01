@@ -5,12 +5,12 @@
 		<title>D3: A simple scatterplot with value labels</title>
 		<script type="text/javascript" src="../d3.js"></script>
 		<style type="text/css">
-			/* No style rules here yet */		
+			/* No style rules here yet */
 		</style>
 	</head>
 	<body>
 		<script type="text/javascript">
-            
+
             //ASSIGNMENT: choose to do 1 of 2 things:
             //1. apply a color scale similar to the bar graph in the previous example to the circles based on their radius
             //2. change the label text from "label here" to the label of that data point from the dataset - apples, etc.
@@ -18,7 +18,7 @@
 			//Width and height
 			var w = 500;
 			var h = 200;
-			
+
 			var dataset = [
         {label:"apples",x:5,y:20,r:3},
         {label:"oranges",x:220,y:90,r:30},
@@ -27,7 +27,7 @@
         {label:"watermelons",x:25,y:95,r:6},
         {label:"pears",x:330,y:88,r:9}
       ]
-	
+
 			//Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
@@ -48,7 +48,7 @@
 			   		return d.r
 			   })
          .attr("fill",function(d){
-             return "blue"//NOTE: ADD YOUR CODE HERE TO FULFILL ONE OF THE 2 ASSIGNMENT CHOICES
+             return "rgb(0, 0, " + Math.round(d.r * 8) + ")"//NOTE: ADD YOUR CODE HERE TO FULFILL ONE OF THE 2 ASSIGNMENT CHOICES
          });
 
 			svg.selectAll("text")
@@ -56,7 +56,7 @@
 			   .enter()
 			   .append("text")
 			   .text(function(d) {
-			   		return "label here"
+			   		return d.label
 			   })
 			   .attr("x", function(d) {
 			   		return d.x+d.r;
@@ -67,7 +67,7 @@
 			   .attr("font-family", "sans-serif")
 			   .attr("font-size", "11px")
 			   .attr("fill", "red");
-			
+
 		</script>
 	</body>
 </html>
