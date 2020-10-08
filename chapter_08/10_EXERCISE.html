@@ -5,7 +5,7 @@
 		<title>D3: Time axis, prettier</title>
 		<script type="text/javascript" src="../d3.js"></script>
 		<style type="text/css">
-			/* No style rules here yet */		
+			/* No style rules here yet */
 		</style>
 	</head>
 	<body>
@@ -14,14 +14,14 @@
             //add a text label above each circle that shows its value
             //change the color of each circle and line according to its value using a scale not a threshold
             //change the x axis so that each line and circle has a corresponding tick value
-            
+
             //again, the word TODO: marks where the code you write could be added
 
 			//Width and height
 			var w = 800;
 			var h = 300;
 			var padding = 40;
-			
+
 			var dataset, xScale, yScale, xAxis, yAxis, cScale;  //Empty, for now
 
 			//For converting strings to Dates
@@ -64,15 +64,22 @@
 								])
 							   .range([h - padding, padding]);
 
+
+			 cScale = d3.scaleLinear()
+								 				 .domain([
+								 					0,
+								 					d3.max(dataset, function(d) { return d.Amount; })
+								 				])
+								 				 .range(["red", "blue"]);
                //TODO: make a linear scale named cScale for the colors you will use
                 //HINT: the domain is the Amount, and the range is an array of 2 colors such as ["red","blue"]
-				           
-                               
+
+
 
 				//Define X axis
 				xAxis = d3.axisBottom()
 								  .scale(xScale)
-								  .ticks(9)//TODO: change ticks 
+								  .ticks(31)//TODO: change ticks
 								  .tickFormat(formatTime);
 
 				//Define Y axis
@@ -80,7 +87,7 @@
 								  .scale(yScale)
 								  .ticks(10);
 
-                                  
+
 
 				//Create SVG element
 				var svg = d3.select("body")
@@ -105,7 +112,7 @@
 				   })
                    .attr("stroke",function(d){
                        //TODO: replace the color below by using your newly created cScale turn the amount into a corresponding color
-                      return "#000"
+                      return cScale(d.Amount);
                    })
 				   .attr("stroke-width", 1);
 
@@ -122,16 +129,34 @@
 				   })
 				   .attr("r", 3)
                    .attr("fill",function(d){
+										 return cScale(d.Amount);
                        //TODO: use your newly created cScale to the amount and return the corresponding color
-                     
+
                    });
-	   			
+
+									 svg.selectAll("text")
+								 		 .data(dataset)
+								 		 .enter()
+								 		 .append("text")
+								 		 .text(function(d) {
+								 			 return d.Amount;
+								 		 })
+								 		 .attr("x", function(d) {
+								 				return xScale(d.Date)-5.5;
+								 		 })
+								 		 .attr("y", function(d) {
+								 			 return yScale(d.Amount)-5;
+								 		 })
+								 		 .attr("font-family", "sans-serif")
+								 		 .attr("font-size", "10px")
+								 		 .attr("fill", "black");
+
 	   			//Create X axis
 	   			svg.append("g")
 	   				.attr("class", "axis")
 	   				.attr("transform", "translate(0," + (h - padding) + ")")
 	   				.call(xAxis);
-	   			
+
 	   			//Create Y axis
 	   			svg.append("g")
 	   				.attr("class", "axis")
@@ -139,7 +164,7 @@
 	   				.call(yAxis);
 
 			});
-			
+
 		</script>
 	</body>
 </html>
