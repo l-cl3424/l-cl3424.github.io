@@ -9,9 +9,9 @@
 		</style>
 	</head>
 	<body>
-	
+
 		<p>Click on this text to remove a data value from the chart!</p>
-			
+
 		<script type="text/javascript">
             //ASSIGNMENT:
                         //this code currently erases only the bar on click, but not the number labels
@@ -21,7 +21,7 @@
 			//Width and height
 			var w = 600;
 			var h = 250;
-			
+
 			var dataset = [ { key: 0, value: 5 },		//dataset is now an array of objects.
 							{ key: 1, value: 10 },		//Each object has a 'key' and a 'value'.
 							{ key: 2, value: 13 },
@@ -47,16 +47,16 @@
 							.domain(d3.range(dataset.length))
 							.rangeRound([0, w])
 							.paddingInner(0.05);
-			
+
 			var yScale = d3.scaleLinear()
 							.domain([0, d3.max(dataset, function(d) { return d.value; })])
 							.range([0, h]);
-			
+
 			//Define key function, to be used when binding data
 			var key = function(d) {
 				return d.key;
 			};
-			
+
 			//Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
@@ -104,13 +104,13 @@
 
 
 
-			//On click, update with new data			
+			//On click, update with new data
 			d3.select("p")
 				.on("click", function() {
 
 					//Remove one value from dataset
 					dataset.shift();
-					
+
 					//Update scale domains
 					xScale.domain(d3.range(dataset.length));
 					yScale.domain([0, d3.max(dataset, function(d) { return d.value; })]);
@@ -118,7 +118,7 @@
 					//Select…
 					var bars = svg.selectAll("rect")
 						.data(dataset, key);		//Bind data with custom key function
-					
+
 					//Enter…
 					bars.enter()
 						.append("rect")
@@ -174,9 +174,17 @@
 							return h - yScale(d.value) + 14;
 					   });
 
+						 svg.selectAll("text")
+	 					   .data(dataset, key)
+							 .exit()
+ 	 						.transition()
+ 	 						.duration(500)
+ 	 						.attr("x", -xScale.bandwidth())  // <-- Exit stage left
+ 	 						.remove();
+
 				});
 
-			
+
 		</script>
 	</body>
 </html>

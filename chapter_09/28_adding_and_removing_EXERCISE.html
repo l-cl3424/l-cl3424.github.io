@@ -9,10 +9,10 @@
 		</style>
 	</head>
 	<body>
-	
+
 		<p id="add">Add a new data value</p>
 		<p id="remove">Remove a data value</p>
-			
+
 		<script type="text/javascript">
             //ASSIGNMENT:
                         //this code currently erases AND adds only the bar on click, but not the number labels
@@ -23,7 +23,7 @@
 			//Width and height
 			var w = 600;
 			var h = 250;
-			
+
 			var dataset = [ { key: 0, value: 5 },		//dataset is now an array of objects.
 							{ key: 1, value: 10 },		//Each object has a 'key' and a 'value'.
 							{ key: 2, value: 13 },
@@ -44,21 +44,21 @@
 							{ key: 17, value: 18 },
 							{ key: 18, value: 23 },
 							{ key: 19, value: 25 } ];
-			
+
 			var xScale = d3.scaleBand()
 							.domain(d3.range(dataset.length))
 							.rangeRound([0, w])
 							.paddingInner(0.05);
-			
+
 			var yScale = d3.scaleLinear()
 							.domain([0, d3.max(dataset, function(d) { return d.value; })])
 							.range([0, h]);
-			
+
 			//Define key function, to be used when binding data
 			var key = function(d) {
 				return d.key;
 			};
-			
+
 			//Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
@@ -106,13 +106,13 @@
 
 
 
-			//On click, update with new data			
+			//On click, update with new data
 			d3.selectAll("p")
 				.on("click", function() {
 
 					//See which p was clicked
 					var paragraphID = d3.select(this).attr("id");
-					
+
 					//Decide what to do next
 					if (paragraphID == "add") {
 						//Add a data value
@@ -128,7 +128,7 @@
 						//Remove a value
 						dataset.shift();	//Remove one value from dataset
 					}
-					
+
 					//Update scale domains
 					xScale.domain(d3.range(dataset.length));
 					yScale.domain([0, d3.max(dataset, function(d) { return d.value; })]);
@@ -136,7 +136,7 @@
 					//Select…
 					var bars = svg.selectAll("rect")
 						.data(dataset, key);
-					
+
 					//Enter…
 					bars.enter()
 						.append("rect")
@@ -178,23 +178,49 @@
 					//
 					//Exercise: Modify this code to add and remove the correct labels each time!
 					//
-					svg.selectAll("text")
-					   .data(dataset, key)
-					   .transition()
-					   .duration(500)
-					   .text(function(d) {
-					   		return d.value;
-					   })
-					   .attr("x", function(d, i) {
-							return xScale(i) + xScale.bandwidth() / 2;
-					   })
-					   .attr("y", function(d) {
-							return h - yScale(d.value) + 14;
-					   });
+
+						 var words = svg.selectAll("text")
+	 						   .data(dataset, key);
+
+							words.enter()
+								.append("text")
+								.text(function(d) {
+									 return d.value;
+								})
+								.attr("text-anchor", "middle")
+								.attr("x", function(d, i) {
+									 return xScale(i) + xScale.bandwidth() / 2;
+								})
+								.attr("y", function(d) {
+									 return h - yScale(d.value) + 14;
+								})
+								.merge(words)
+								.transition()
+								.duration(500)
+								.text(function(d) {
+									 return d.value;
+								})
+								.attr("x", function(d, i) {
+									 return xScale(i) + xScale.bandwidth() / 2;
+								})
+								.attr("y", function(d) {
+								 return h - yScale(d.value) + 14;
+								})
+								.attr("font-family", "sans-serif")
+								.attr("font-size", "11px")
+								.attr("fill", "white");
+
+								words.exit()
+									.transition()
+									.duration(500)
+									.attr("x", w)
+									.remove();
+
+
 
 				});
 
-			
+
 		</script>
 	</body>
 </html>
