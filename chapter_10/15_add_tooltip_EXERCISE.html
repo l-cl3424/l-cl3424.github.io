@@ -98,7 +98,14 @@
 				   .attr("stroke", "#ddd")
 				   .attr("stroke-width", 1);
 
-                   //TODO:
+            var showAmount = function(){
+							svg.selectAll("circle")
+							.append("title")
+							.attr("id","tooltip")
+							.text(function(d){
+								return "This amount is "+d.Amount;
+							})
+						}       //TODO:
                    //define a tooltip
                    //call it
 
@@ -115,12 +122,9 @@
 				   })
 				   .attr("r", 5)
                    .on("mouseover",function(d,i){
-                       d3.select(this).attr("fill","red")
-                      .append("title")
-											.attr("id","tooltip")
-											.text(function(d){
-												return "This amount is "+d.Amount;
-											}) //TODO: show tooltip here
+                       d3.select(this).attr("fill","red");
+											 showAmount();
+                     //TODO: show tooltip here
                    })
                    .on("mouseout",function(d,i){
                        d3.select(this).attr("fill","black")
