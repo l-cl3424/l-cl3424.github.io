@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: SVG bar chart with value labels (centered)</title>
+		<script type="text/javascript" src="../d3.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+            //ASSIGNMENT: to familiarize youself with drawing in svg
+            //1. change the bar chart orientation so that it is horizontal(bars go across) instead of vertical, changing the placement of text as well to keep the number labels at the end of each bar
+            //2. change the bar chart colors so that instead of shades of blue, the colors are shades of red or green. (r,g,b)
+
+			//Width and height
+			var w = 500;
+			var h = 500;//NOTE: I have changed the height of the svg already so that the chart will not be clipped
+			var barPadding = 1;
+
+			var rowConverter = function(d) {
+				return {
+					pvalue: parseFloat(d.pvalue),
+					coefficient: parseFloat(d.coefficient),
+				};
+			}
+			d3.csv("p.csv", rowConverter)
+            .then(function(data) {
+
+	dataset = data;
+
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			svg.selectAll("rect")
+			   .data(d.pvalue)
+			   .enter()
+			   .append("rect")
+                //HINT: start by switching the x and y values with eachother, and the width and height values with eachother.
+                        //then adjust the x values such that each rectangle aligns on the left.
+			   .attr("y", function(d, i) {
+			   		return i * (h / 13);
+			   })
+			   .attr("x", function(d) {
+			   		return 0;
+			   })
+			   .attr("height", h / 13 - barPadding)
+			   .attr("width", function(d) {
+			   		return d.pvalue * 4;
+			   })
+			   .attr("fill", function(d) {
+					return "rgb(" + Math.round(d * 10) + ", 0, 0)";
+			   });
+
+
+             // NOTE: you will need to repeat the same steps for the text labels
+			svg.selectAll("text")
+			   .data(dataset)
+			   .enter()
+			   .append("text")
+			   .text(function(d) {
+			   		return d.pvalue;
+			   })
+			   .attr("text-anchor", "middle")
+			   .attr("y", function(d, i) {
+			   		return i * (h / 13) + (h / 13 - barPadding) / 2+4;
+			   })
+			   .attr("x", function(d) {
+			   		return d.pvalue * 4 - 10;
+			   })
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+			   .attr("fill", "white");
+
+})
+
+		</script>
+	</body>
+</html>

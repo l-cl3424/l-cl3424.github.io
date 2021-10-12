@@ -1,0 +1,5 @@
+group,Traning Set,Test Set
+K Nearest Neighbor,100,92.15
+Decision Tree,78.6,72.89
+Support Vector Machine,76.99,15.11
+Random Forest,91.88,82.52

@@ -1,0 +1,153 @@
+<!-- Code from d3-graph-gallery.com -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js & color scale-->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+
+<script>
+
+// set the dimensions and margins of the graph
+var margin = {top: 20, right: 30, bottom: 0, left: 10},
+    width = 700 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+// Parse the Data
+d3.csv("odata1017.csv", function(data) {
+
+  // List of groups = header of the csv files
+  var keys = data.columns.slice(1)
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([0,23])
+    .range([0, width]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height*.8 + ")")
+    .call(d3.axisBottom(x).tickSize(-height*.7).tickValues([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]))
+    .select(".domain").remove()
+  // Customization
+  svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+
+  // Add X axis label:
+  svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height-40 )
+      .text("Time (hour)");
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([-500, 500])
+    .range([ height, 0 ])
+    // svg.append("g")
+    //   .call(d3.axisLeft(y).ticks(5))
+      ;
+
+    // Add Y axis label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", 0)
+        .attr("y", 20 )
+        .text("Hourly Population of Each Group in 10/17/2018")
+        .attr("text-anchor", "start")
+
+  // color palette
+  var color = d3.scaleOrdinal()
+    .domain(keys)
+    .range(d3.schemeDark2);
+
+  //stack the data?
+  var stackedData = d3.stack()
+    .offset(d3.stackOffsetSilhouette)
+    .keys(keys)
+    (data)
+
+  // create a tooltip
+  var Tooltip = svg
+    .append("text")
+    .attr("x", 0)
+    .attr("y", 0)
+    .style("opacity", 0)
+    .style("font-size", 17)
+
+  // Three function that change the tooltip when user hover / move / leave a cell
+  var mouseover = function(d) {
+    Tooltip.style("opacity", 1)
+    d3.selectAll(".myArea").style("opacity", .2)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
+  }
+  var mousemove = function(d,i) {
+    grp = keys[i]
+    Tooltip.text(grp)
+  }
+  var mouseleave = function(d) {
+    Tooltip.style("opacity", 0)
+    d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
+   }
+
+  // Area generator
+  var area = d3.area()
+    .x(function(d) { return x(d.data.hour); })
+    .y0(function(d) { return y(d[0]); })
+    .y1(function(d) { return y(d[1]); })
+
+  // Show the areas
+  svg
+    .selectAll("mylayers")
+    .data(stackedData)
+    .enter()
+    .append("path")
+      .attr("class", "myArea")
+      .style("fill", function(d) { return color(d.key); })
+      .attr("d", area)
+      .on("mouseover", mouseover)
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
+
+      // // Add one dot in the legend for each name.
+      // var size = 10
+      // svg.selectAll("myrect")
+      //   .data(keys)
+      //   .enter()
+      //   .append("rect")
+      //     .attr("x", 600)
+      //     .attr("y", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+      //     .attr("width", size)
+      //     .attr("height", size)
+      //     .style("fill", function(d){ return color(d)})
+      //     .on("mouseover", highlight)
+      //     .on("mouseleave", noHighlight)
+      //
+      // // Add one dot in the legend for each name.
+      // svg.selectAll("mylabels")
+      //   .data(keys)
+      //   .enter()
+      //   .append("text")
+      //     .attr("x", 600)
+      //     .attr("y", function(d,i){ return 10 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+      //     .style("fill", function(d){ return color(d)})
+      //     .text(function(d){ return d})
+      //     .attr("text-anchor", "left")
+      //     .style("alignment-baseline", "middle")
+      //     .on("mouseover", highlight)
+      //     .on("mouseleave", noHighlight)
+
+})
+</script>

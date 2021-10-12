@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: Time axis, prettier</title>
+
+
+		<style type="text/css">
+
+
+
+			/* No style rules here yet */
+			/* body {
+					background-color:#000000;
+					font-family:helvetica;
+					color:#ffffff;
+			} */
+
+
+
+		</style>
+	</head>
+	<body>
+
+    <div id="scatter"></div>
+    <div id="bar"></div>
+		<div id="sankey"></div>
+
+<p id="title">HOURLY AVERAGE TIME SPENT IN APPS</p>
+<p id="name">Chengliang Li</p>
+<p id="text">
+<!-- I have collected data for 10 days from Screen Time, which records the time I spend on different
+apps every hour in each day, in Settings<br> of my iPhone, and I calculated the average minutes
+I spent in my top 4 popular apps in every hour of the whole day. It’s easy to tell my<br>daily
+schedule (e.g. I usually slept from 3:00 – 10:00 during these 10 days) from all of three different
+ways of visualizations, and also <br>each of them has different advantages: From the scatter
+plot it’s evident to compare the different time spent per hour in each app; from<br> the bar chart
+the total minutes that I was using apps per hour are clear to contrast, as well as the Sankey
+diagram, from which the total <br>minutes spent in an app in the whole day is also obvious.
+
+From the visualizations it’s obvious that although the composition of percentage <br>of each
+hour is different, I spent the most time in WeChat
+(the main instant messaging app I use) almost in every hour, except for 19:00 – <br>20:00,in which I spent much more time in Alipay
+than
+other apps (I play a game in Alipay and from 19:00 to 19:30 there is the highest<br> chance
+to get scores), even though the total time for Alipay in a day is the least.
+<br><br>
+If you hover your mouse cursor over a dot, bar, node or link of these interactive charts, you will see a pop-up label showing how many
+<br> minutes I spent in an app or during a certain amount of time. Furthermore, you can drag the nodes in sankey diagram vertically to
+<br>make them in whatever order you want. -->
+</p>
+
+
+
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="sankey.js"></script>
+
+		<script type="text/javascript" src="sankeyDiagram.js"></script>
+	<script type="text/javascript" src="../d3.js"></script>
+
+		<script type="text/javascript" src="mlc.js"></script>
+		<p id="sp">Scatting Plot</p>
+		<script type="text/javascript" src="mlc.js"></script>
+		<p id="bc">Bar Chart</p>
+		<p id="sd">Sankey Diagram</p>
+
+
+
+
+	</body>
+</html>
